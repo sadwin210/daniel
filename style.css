@@ -1,0 +1,55 @@
+.header{
+    display: flex;
+    justify-content: space-around;
+    background-color: rgb(164, 213, 255);
+    height: 100px;
+    right: 100px;
+    align-items: center;
+}
+body{
+    background-color: rgb(198, 219, 219);
+}
+.img{
+    width: 120px;
+    height: 100px;
+    margin-left: -150px;
+}
+.b{
+    color: rgb(6, 25, 41);
+    display: flex;
+    align-items: center;
+}
+.contacts{
+     color: rgb(44, 125, 187);
+     display: flex;
+     align-items: center;
+}
+h1{
+    display: flex;
+    justify-content: center;
+}
+.container{
+    display: flex;
+    justify-content: space-around;
+
+}
+.box1{
+    background-color: rgb(81, 203, 219);
+    border-radius: 5%;
+    width: 30%;
+
+}
+.box2{
+    background-color: rgb(155, 243, 192);
+    width: 30%;
+    border-radius: 5%;
+
+}
+.box3{
+    background-color: bisque;
+    width: 30%;
+    border-radius: 5%;
+}
+a{
+    padding: 15px;
+}

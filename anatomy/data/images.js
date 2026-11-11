@@ -1,7 +1,7 @@
 /* Иллюстрации: названия статей английской Википедии, из которых сайт берёт главное изображение.
    Порядок в каждом списке совпадает с порядком терминов в теме. */
 window.ANATOMY_IMG = {
-  sections: { osteology: "Human skeleton", arthrology: "Synovial joint", myology: "Muscular system" },
+  sections: { osteology: "Human skeleton", arthrology: "Synovial joint", myology: "List of skeletal muscles of the human body" },
   topics: {
     "osteology/general": ["Human skeleton","Bone","Long bone","Short bone","Flat bone","Irregular bone","Paranasal sinuses","Sesamoid bone"],
     "osteology/vertebral": ["Vertebral column","Vertebra","Cervical vertebrae","Atlas (anatomy)","Axis (anatomy)","Vertebra prominens","Thoracic vertebrae","Lumbar vertebrae","Sacrum","Coccyx"],

@@ -47,6 +47,88 @@
   };
   const findSection = (id) => DATA.find((s) => s.id === id);
 
+  /* ---------- иллюстрации из Википедии ---------- */
+  const IMG = window.ANATOMY_IMG || { sections: {}, topics: {} };
+  const IMG_STORE = "anatomy-img-v1";
+  const API = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&piprop=thumbnail&pithumbsize=500";
+  let imgCache = {};
+  try { imgCache = JSON.parse(localStorage.getItem(IMG_STORE)) || {}; } catch (e) { imgCache = {}; }
+  const imgFailed = {};   // не найдено в этой сессии
+  const imgPending = {};  // запрос уже отправлен
+  const imgTitle = (sec, topic, idx) => (IMG.topics[sec.id + "/" + topic.id] || [])[idx];
+
+  function figure(title, cls) {
+    if (!title || imgFailed[title]) return "";
+    const c = imgCache[title];
+    const inner = c
+      ? `<a href="https://en.wikipedia.org/wiki/${encodeURIComponent(c.page.replace(/ /g, "_"))}" target="_blank" rel="noopener" title="Открыть статью и сведения об изображении">
+           <img src="${esc(c.src)}" width="${c.w}" height="${c.h}" alt="" loading="lazy" onerror="this.closest('figure').remove()">
+         </a><figcaption>Википедия</figcaption>`
+      : `<div class="pic-wait"></div>`;
+    return `<figure class="pic ${cls || ""}" data-img="${esc(title)}">${inner}</figure>`;
+  }
+
+  function storeImage(title, page) {
+    if (page && page.thumbnail) {
+      imgCache[title] = { src: page.thumbnail.source, w: page.thumbnail.width, h: page.thumbnail.height, page: page.title };
+      return true;
+    }
+    return false;
+  }
+
+  function fetchBatch(titles) {
+    return fetch(API + "&redirects=1&pilimit=50&titles=" + encodeURIComponent(titles.join("|")))
+      .then((r) => r.json())
+      .then((r) => {
+        const q = r.query || {};
+        const norm = {}, red = {}, pages = {};
+        (q.normalized || []).forEach((x) => { norm[x.from] = x.to; });
+        (q.redirects || []).forEach((x) => { red[x.from] = x.to; });
+        Object.keys(q.pages || {}).forEach((id) => { pages[q.pages[id].title] = q.pages[id]; });
+        return titles.filter((t) => {
+          let f = norm[t] || t; f = red[f] || f;
+          return !storeImage(t, pages[f]);
+        });
+      });
+  }
+
+  // запасной путь: поиск статьи по названию, если точного совпадения или картинки нет
+  function fetchBySearch(title) {
+    return fetch(API + "&generator=search&gsrlimit=3&gsrsearch=" + encodeURIComponent(title))
+      .then((r) => r.json())
+      .then((r) => {
+        const pages = Object.values((r.query || {}).pages || {}).sort((a, b) => a.index - b.index);
+        if (!pages.some((p) => storeImage(title, p))) imgFailed[title] = 1;
+      })
+      .catch(() => { imgFailed[title] = 1; });
+  }
+
+  function hydrate() {
+    document.querySelectorAll("figure.pic[data-img]").forEach((el) => {
+      const t = el.dataset.img;
+      if (imgFailed[t]) { el.remove(); return; }
+      if (imgCache[t] && el.querySelector(".pic-wait")) el.outerHTML = figure(t, el.className.replace("pic", "").trim());
+    });
+  }
+
+  function loadImages(titles) {
+    const need = Array.from(new Set(titles.filter((t) => t && !imgCache[t] && !imgFailed[t] && !imgPending[t])));
+    if (!need.length || typeof fetch !== "function") return;
+    need.forEach((t) => { imgPending[t] = 1; });
+    const jobs = [];
+    for (let i = 0; i < need.length; i += 50) {
+      const batch = need.slice(i, i + 50);
+      jobs.push(fetchBatch(batch)
+        .then((missing) => Promise.all(missing.map(fetchBySearch)))
+        .catch(() => { batch.forEach((t) => { if (!imgCache[t]) imgFailed[t] = 1; }); }));
+    }
+    Promise.all(jobs).then(() => {
+      need.forEach((t) => { delete imgPending[t]; });
+      try { localStorage.setItem(IMG_STORE, JSON.stringify(imgCache)); } catch (e) { /* без кэша */ }
+      hydrate();
+    });
+  }
+
   function itemBody(item) {
     let h = "";
     if (item.d && !item.o && !item.s) h += `<p>${esc(item.d)}</p>`;
@@ -72,6 +154,7 @@
     const pct = st.total ? Math.round((st.done / st.total) * 100) : 0;
     return `
       <section class="col" data-sec="${sec.id}">
+        ${figure(IMG.sections[sec.id], "pic-sec")}
         <div class="col-head">
           <h2><a href="#/${sec.id}">${sec.icon} ${sec.title}</a></h2>
           <p><span class="lat">${sec.lat}</span> — ${sec.about.toLowerCase()}</p>
@@ -96,6 +179,7 @@
       <h1>Анатомия по разделам</h1>
       <p class="lead">Выберите раздел и тему. В каждой теме — конспект с латинскими терминами, карточки для самопроверки и тест.</p>
       <div class="columns">${DATA.map(columnHtml).join("")}</div>`;
+    loadImages(DATA.map((s) => IMG.sections[s.id]));
   }
 
   function renderSection(sec) {
@@ -105,6 +189,7 @@
     app.innerHTML = `
       <div class="crumbs"><a href="#/">Все разделы</a> / ${sec.title}</div>
       <div class="columns" style="grid-template-columns:minmax(0,640px)">${columnHtml(sec)}</div>`;
+    loadImages([IMG.sections[sec.id]]);
   }
 
   /* ---------- тема ---------- */
@@ -149,6 +234,8 @@
     else if (mode === "quiz") renderQuiz(view, sec, topic);
     else renderRead(view, sec, topic, focusIdx);
 
+    loadImages(topic.items.map((_, i) => imgTitle(sec, topic, i)));
+
     const on = app.querySelector(".side a.on");
     if (on && on.scrollIntoView) on.scrollIntoView({ block: "nearest", inline: "center" });
   }
@@ -165,7 +252,10 @@
             </div>
             <button class="check" data-i="${i}" aria-pressed="${ok}">${ok ? "✓ Выучено" : "Отметить"}</button>
           </div>
-          ${itemBody(item)}
+          <div class="item-body">
+            <div>${itemBody(item)}</div>
+            ${figure(imgTitle(sec, topic, i))}
+          </div>
         </article>`;
     }).join("");
 
@@ -221,6 +311,7 @@
           <div class="card">
             <h2>${esc(item.n)}</h2>
             <span class="lat" lang="la">${esc(item.l)}</span>
+            ${figure(imgTitle(sec, topic, idx), "pic-card")}
             ${itemBody(item)}
           </div>
           <div class="actions">

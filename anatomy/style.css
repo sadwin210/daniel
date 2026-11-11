@@ -164,6 +164,21 @@ h1 { font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); line-height: 
 .fields dd { margin: 0; }
 .note { color: var(--muted); font-size: 15px; }
 
+/* ---------- иллюстрации ---------- */
+.item-body { display: flex; gap: 20px; align-items: flex-start; }
+.item-body > div { flex: 1; min-width: 0; }
+.pic { margin: 10px 0 0; flex: none; width: 240px; text-align: center; }
+.pic a { display: block; background: #fff; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.pic img { display: block; width: 100%; height: auto; max-height: 300px; object-fit: contain; }
+.pic figcaption { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.pic-wait { height: 160px; border-radius: 10px; background: var(--surface-2); }
+.pic-sec { width: auto; margin: 0; }
+.pic-sec a { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; }
+.pic-sec img { height: 190px; max-height: none; }
+.pic-sec .pic-wait { height: 190px; border-radius: 0; }
+.pic-sec figcaption { display: none; }
+.pic-card { width: auto; max-width: 340px; margin: 14px auto 4px; }
+
 /* ---------- карточки ---------- */
 .stage { max-width: 680px; margin: 0 auto; }
 .progress-line { color: var(--muted); font-size: 14px; margin-bottom: 10px; text-align: center; }
@@ -217,4 +232,7 @@ h1 { font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); line-height: 
   .fields { grid-template-columns: 1fr; gap: 0; }
   .fields dd { margin-bottom: 8px; }
   .item-head { flex-wrap: wrap; }
+  .item-body { flex-direction: column-reverse; gap: 0; }
+  .pic { width: 100%; max-width: 340px; align-self: center; }
+  .pic-sec { max-width: none; }
 }

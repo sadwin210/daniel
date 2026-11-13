@@ -1,7 +1,13 @@
 /* Иллюстрации: названия статей английской Википедии, из которых сайт берёт главное изображение.
    Порядок в каждом списке совпадает с порядком терминов в теме. */
 window.ANATOMY_IMG = {
-  sections: { osteology: "Human skeleton", arthrology: "Synovial joint", myology: "List of skeletal muscles of the human body" },
+  sections: {
+    osteology: "Human skeleton",
+    arthrology: "Synovial joint",
+    myology: "List of skeletal muscles of the human body",
+    splanchnology: "Human digestive system",
+    angiology: "Circulatory system",
+  },
   topics: {
     "osteology/general": ["Human skeleton","Bone","Long bone","Short bone","Flat bone","Irregular bone","Paranasal sinuses","Sesamoid bone"],
     "osteology/vertebral": ["Vertebral column","Vertebra","Cervical vertebrae","Atlas (anatomy)","Axis (anatomy)","Vertebra prominens","Thoracic vertebrae","Lumbar vertebrae","Sacrum","Coccyx"],
@@ -36,5 +42,23 @@ window.ANATOMY_IMG = {
     "myology/thigh": ["Sartorius muscle","Quadriceps","Pectineus muscle","Adductor longus muscle","Adductor brevis muscle","Adductor magnus muscle","Gracilis muscle","Biceps femoris muscle","Semitendinosus muscle","Semimembranosus muscle"],
     "myology/leg": ["Tibialis anterior muscle","Extensor digitorum longus muscle","Extensor hallucis longus muscle","Fibularis longus","Fibularis brevis","Triceps surae muscle","Plantaris muscle","Popliteus muscle","Tibialis posterior muscle","Flexor digitorum longus muscle","Flexor hallucis longus muscle"],
     "myology/foot": ["Extensor digitorum brevis muscle","Abductor hallucis muscle","Flexor hallucis brevis muscle","Adductor hallucis muscle","Abductor digiti minimi muscle of foot","Flexor digitorum brevis muscle","Quadratus plantae muscle","Lumbricals of the foot","Dorsal interossei of the foot"],
+    "splanchnology/general": ["Organ (biology)","Gastrointestinal wall","Parenchyma","Gland"],
+    "splanchnology/mouth": ["Human mouth","Human tooth","Tongue","Palate","Salivary gland"],
+    "splanchnology/canal": ["Pharynx","Esophagus","Stomach","Duodenum","Small intestine","Appendix (anatomy)","Large intestine","Rectum"],
+    "splanchnology/glands": ["Liver","Gallbladder","Pancreas","Peritoneum"],
+    "splanchnology/respiratory": ["Human nose","Larynx","Trachea","Lung","Pleural cavity","Mediastinum"],
+    "splanchnology/urinary": ["Kidney","Nephron","Ureter","Urinary bladder","Urethra"],
+    "splanchnology/male": ["Testicle","Epididymis","Vas deferens","Prostate","Corpus cavernosum penis"],
+    "splanchnology/female": ["Ovary","Fallopian tube","Uterus","Vaginal fornix","Vestibular bulbs","Mammary gland","Perineum"],
+    "splanchnology/endocrine": ["Pituitary gland","Pineal gland","Thyroid","Parathyroid gland","Adrenal gland","Pancreatic islets"],
+    "angiology/general": ["Pulmonary circulation","Blood vessel","Capillary","Fetal circulation"],
+    "angiology/heart": ["Heart","Atrium (heart)","Tricuspid valve","Pulmonary vein","Ventricle (heart)","Pericardium","Cardiac conduction system","Coronary arteries","Heart sounds"],
+    "angiology/aorta": ["Pulmonary artery","Aorta","Aortic arch"],
+    "angiology/head-neck": ["Common carotid artery","External carotid artery","Internal carotid artery","Subclavian artery","Circle of Willis"],
+    "angiology/upper-limb": ["Axillary artery","Brachial artery","Radial artery","Ulnar artery","Superficial palmar arch"],
+    "angiology/trunk": ["Descending thoracic aorta","Abdominal aorta","Celiac artery","Superior mesenteric artery","Inferior mesenteric artery"],
+    "angiology/lower-limb": ["Internal iliac artery","External iliac artery","Femoral artery","Popliteal artery","Anterior tibial artery","Posterior tibial artery"],
+    "angiology/veins": ["Superior vena cava","Internal jugular vein","Cephalic vein","Azygos vein","Inferior vena cava","Portal vein","Great saphenous vein"],
+    "angiology/lymph": ["Lymphatic system","Thoracic duct","Right lymphatic duct","Lymph node","Spleen","Thymus","Tonsil"],
   },
 };

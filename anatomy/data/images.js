@@ -64,5 +64,10 @@ window.ANATOMY_IMG = {
     "myology/fasciae-trunk": ["Thoracolumbar fascia","Clavipectoral fascia","Transversalis fascia","Rectus sheath","Lumbar triangle"],
     "myology/fasciae-upper": ["Brachial fascia","Axilla","Cubital fossa","Forearm","Carpal tunnel"],
     "myology/fasciae-lower": ["Fascia lata","Vascular lacuna","Femoral triangle","Adductor canal","Popliteal fossa","Plantar fascia"],
+    "osteology/age": ["Ossification", "Greenstick fracture", "Fontanelle", "Vertebral column", "Rib cage", "Bone age"],
+    "arthrology/age": ["Cranial sutures", "Hypermobility (joints)", "Temporomandibular joint", "Hip dysplasia", "Pulled elbow", "Genu valgum", "Flat feet"],
+    "myology/age": ["Muscle", "Buccal fat pad", "Torticollis", "Thoracic diaphragm", "Umbilical hernia", "Human back"],
+    "splanchnology/age": ["Human mouth", "Deciduous teeth", "Permanent teeth", "Adenoid", "Pyloric stenosis", "Cecum", "Liver", "Croup", "Renal lobe", "Cryptorchidism", "Adrenal gland"],
+    "angiology/age": ["Patent ductus arteriosus", "Heart", "Vein", "Lymph node", "Thymus"],
   },
 };

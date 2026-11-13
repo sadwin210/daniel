@@ -180,12 +180,21 @@
         </div>
         <ul class="topics">
           ${sec.topics.map((t) => `
-            <li><a href="#/${sec.id}/${t.id}">
-              <span class="t-name"><b>${esc(t.title)}</b><small>${esc(t.note)}</small></span>
+            <li><a href="#/${sec.id}/${t.id}" class="${t.age ? "is-age" : ""}">
+              <span class="t-name"><b>${esc(t.title)}</b>${t.age ? ` <span class="tag">педиатрия</span>` : ""}<small>${esc(t.note)}</small></span>
               ${countBadge(topicDone(sec, t), t.items.length)}
             </a></li>`).join("")}
         </ul>
       </section>`;
+  }
+
+  // быстрый переход к темам «Возрастные особенности» всех разделов
+  function ageStrip() {
+    const links = DATA.map((s) => {
+      const t = s.topics.find((x) => x.age);
+      return t ? `<a href="#/${s.id}/${t.id}" data-sec="${s.id}">${s.title} ${countBadge(topicDone(s, t), t.items.length)}</a>` : "";
+    }).join("");
+    return links ? `<nav class="age-strip" aria-label="Возрастные особенности"><span>Возрастные особенности:</span>${links}</nav>` : "";
   }
 
   function renderHome() {
@@ -196,6 +205,7 @@
     app.innerHTML = `
       <h1>Анатомия по разделам</h1>
       <p class="lead">Выберите раздел и тему. В каждой теме — конспект с латинскими терминами, карточки для самопроверки и тест.</p>
+      ${ageStrip()}
       <div class="columns home">${DATA.map(columnHtml).join("")}</div>`;
     loadImages(DATA.map((s) => IMG.sections[s.id]));
   }
@@ -227,12 +237,12 @@
           <h3>${sec.title}</h3>
           ${sec.topics.map((t) => `
             <a href="#/${sec.id}/${t.id}" class="${t.id === topic.id ? "on" : ""}">
-              <span>${esc(t.title)}</span><span>${topicDone(sec, t)}/${t.items.length}</span>
+              <span>${esc(t.title)}${t.age ? " ·&nbsp;педиатрия" : ""}</span><span>${topicDone(sec, t)}/${t.items.length}</span>
             </a>`).join("")}
         </aside>
         <div>
           <div class="crumbs"><a href="#/">Все разделы</a> / <a href="#/${sec.id}">${sec.title}</a></div>
-          <h1>${esc(topic.title)}</h1>
+          <h1>${esc(topic.title)}${topic.age ? ` <span class="tag big">педиатрия</span>` : ""}</h1>
           <p class="lead" style="margin-bottom:0">${esc(topic.note)} · выучено ${done} из ${topic.items.length}</p>
           <div class="tabs" role="tablist">
             <button data-mode="read" class="${mode === "read" ? "on" : ""}">Конспект</button>

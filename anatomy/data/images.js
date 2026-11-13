@@ -60,5 +60,9 @@ window.ANATOMY_IMG = {
     "angiology/lower-limb": ["Internal iliac artery","External iliac artery","Femoral artery","Popliteal artery","Anterior tibial artery","Posterior tibial artery"],
     "angiology/veins": ["Superior vena cava","Internal jugular vein","Cephalic vein","Azygos vein","Inferior vena cava","Portal vein","Great saphenous vein"],
     "angiology/lymph": ["Lymphatic system","Thoracic duct","Right lymphatic duct","Lymph node","Spleen","Thymus","Tonsil"],
+    "myology/fasciae-head-neck": ["Temporal fascia","Deep cervical fascia","Pretracheal fascia","Retropharyngeal space","Anterior triangle of the neck"],
+    "myology/fasciae-trunk": ["Thoracolumbar fascia","Clavipectoral fascia","Transversalis fascia","Rectus sheath","Lumbar triangle"],
+    "myology/fasciae-upper": ["Brachial fascia","Axilla","Cubital fossa","Forearm","Carpal tunnel"],
+    "myology/fasciae-lower": ["Fascia lata","Vascular lacuna","Femoral triangle","Adductor canal","Popliteal fossa","Plantar fascia"],
   },
 };

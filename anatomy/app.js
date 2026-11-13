@@ -37,6 +37,23 @@
 
   /* ---------- утилиты ---------- */
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // Латинские термины в тексте выделяются автоматически: последовательность слов латиницей,
+  // в которой есть хотя бы одно слово из трёх строчных букв (чтобы не трогать C IV, Th XII, V3).
+  const ABBR = "mm|m|nn|n|ligg|lig|artt|art|aa|a|vv|v|rr|r|gll|gl";
+  const WORD = "(?:(?:" + ABBR + ")\\.|[A-Za-z]+)";
+  const LATIN_RUN = new RegExp(WORD + "(?:[ \\u00A0]" + WORD + ")*", "gi");
+  function fmt(text) {
+    const s = String(text);
+    let out = "", last = 0;
+    s.replace(LATIN_RUN, (m, offset) => {
+      out += esc(s.slice(last, offset));
+      out += /[a-z]{3}/.test(m) ? `<i class="lt" lang="la">${esc(m)}</i>` : esc(m);
+      last = offset + m.length;
+      return m;
+    });
+    return out + esc(s.slice(last));
+  }
+
   const shuffle = (arr) => {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -131,11 +148,11 @@
 
   function itemBody(item) {
     let h = "";
-    if (item.d && !item.o && !item.s) h += `<p>${esc(item.d)}</p>`;
-    const rows = FIELDS.filter(([k]) => item[k]).map(([k, label]) => `<dt>${label}</dt><dd>${esc(item[k])}</dd>`).join("");
+    if (item.d && !item.o && !item.s) h += `<p>${fmt(item.d)}</p>`;
+    const rows = FIELDS.filter(([k]) => item[k]).map(([k, label]) => `<dt>${label}</dt><dd>${fmt(item[k])}</dd>`).join("");
     if (rows) h += `<dl class="fields">${rows}</dl>`;
-    if (item.p) h += `<ul>${item.p.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`;
-    if (item.d && (item.o || item.s)) h += `<p class="note">${esc(item.d)}</p>`;
+    if (item.p) h += `<ul>${item.p.map((x) => `<li>${fmt(x)}</li>`).join("")}</ul>`;
+    if (item.d && (item.o || item.s)) h += `<p class="note">${fmt(item.d)}</p>`;
     return h;
   }
 
@@ -156,7 +173,7 @@
       <section class="col" data-sec="${sec.id}">
         ${figure(IMG.sections[sec.id], "pic-sec")}
         <div class="col-head">
-          <h2><a href="#/${sec.id}">${sec.icon} ${sec.title}</a></h2>
+          <h2><a href="#/${sec.id}">${sec.title}</a></h2>
           <p><span class="lat">${sec.lat}</span> — ${sec.about.toLowerCase()}</p>
           <div class="bar"><i style="width:${pct}%"></i></div>
           <div class="bar-label">Выучено ${st.done} из ${st.total}</div>
@@ -175,16 +192,18 @@
     renderNav(null);
     document.title = "Анатомия — учебник по разделам";
     app.removeAttribute("data-sec");
+    app.classList.add("wide");
     app.innerHTML = `
       <h1>Анатомия по разделам</h1>
       <p class="lead">Выберите раздел и тему. В каждой теме — конспект с латинскими терминами, карточки для самопроверки и тест.</p>
-      <div class="columns">${DATA.map(columnHtml).join("")}</div>`;
+      <div class="columns home">${DATA.map(columnHtml).join("")}</div>`;
     loadImages(DATA.map((s) => IMG.sections[s.id]));
   }
 
   function renderSection(sec) {
     renderNav(sec.id);
     document.title = sec.title + " — Анатомия";
+    app.classList.remove("wide");
     app.setAttribute("data-sec", sec.id);
     app.innerHTML = `
       <div class="crumbs"><a href="#/">Все разделы</a> / ${sec.title}</div>
@@ -199,6 +218,7 @@
   function renderTopic(sec, topic, focusIdx) {
     renderNav(sec.id);
     document.title = topic.title + " — " + sec.title;
+    app.classList.remove("wide");
     app.setAttribute("data-sec", sec.id);
     const done = topicDone(sec, topic);
     app.innerHTML = `
@@ -347,6 +367,13 @@
       const others = shuffle(pool.filter((x) => x[prop] !== correct[prop])).slice(0, 3);
       return shuffle([correct].concat(others));
     };
+    // варианты из той же темы (для вопросов по полям мышц), с добором из раздела
+    const pickBy = (correct, prop) => {
+      const local = topic.items.filter((x) => x[prop] && x[prop] !== correct[prop]);
+      const rest = pool.filter((x) => x[prop] && x[prop] !== correct[prop] && local.indexOf(x) < 0);
+      const others = shuffle(local).concat(shuffle(rest)).slice(0, 3);
+      return shuffle([correct].concat(others));
+    };
     const qs = [];
     topic.items.forEach((item) => {
       const toLatin = Math.random() < 0.5;
@@ -354,6 +381,7 @@
         ? { text: item.n, sub: "Как это называется по-латыни?", options: pick(item, "l"), show: "l", item }
         : { text: item.l, sub: "Что это по-русски?", options: pick(item, "n"), show: "n", latinQ: true, item });
       if (item.f) qs.push({ text: item.f, sub: "Какая мышца выполняет эту функцию?", options: pick(item, "n"), show: "n", item });
+      if (item.v && item.o && Math.random() < 0.4) qs.push({ text: item.n, sub: "Откуда начинается эта мышца?", options: pickBy(item, "o"), show: "o", rich: true, item });
       if (item.t && item.s) qs.push({ text: item.t, sub: "Какому суставу соответствует эта характеристика?", options: pick(item, "n"), show: "n", item });
     });
     return shuffle(qs).slice(0, 12);
@@ -387,7 +415,7 @@
     view.innerHTML = `
       <div class="stage">
         <div class="progress-line">Вопрос ${s.pos + 1} из ${s.qs.length} · верно: ${s.right}</div>
-        <p class="quiz-q ${q.latinQ ? "lat" : ""}">${esc(q.text)}</p>
+        <p class="quiz-q ${q.latinQ ? "lat" : ""}">${q.latinQ ? esc(q.text) : fmt(q.text)}</p>
         <p class="quiz-sub">${q.sub}</p>
         <div class="options">
           ${q.options.map((o, i) => {
@@ -395,7 +423,7 @@
             if (s.answered != null) {
               if (o === q.item) cls = "right"; else if (i === s.answered) cls = "wrong";
             }
-            return `<button data-i="${i}" class="${cls} ${q.show === "l" ? "lat" : ""}" ${s.answered != null ? "disabled" : ""}>${esc(o[q.show])}</button>`;
+            return `<button data-i="${i}" class="${cls} ${q.show === "l" ? "lat" : ""}" ${s.answered != null ? "disabled" : ""}>${q.rich ? fmt(o[q.show]) : esc(o[q.show])}</button>`;
           }).join("")}
         </div>
         ${s.answered != null ? `<div class="actions"><button class="btn primary" id="next">${s.pos + 1 === s.qs.length ? "Результат" : "Дальше"}</button></div>` : ""}
@@ -418,6 +446,7 @@
   function renderSearch(query) {
     renderNav(null);
     app.removeAttribute("data-sec");
+    app.classList.remove("wide");
     const q = query.trim().toLowerCase();
     const hits = [];
     DATA.forEach((sec) => sec.topics.forEach((topic) => topic.items.forEach((item, i) => {

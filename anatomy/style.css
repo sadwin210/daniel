@@ -10,6 +10,8 @@
   --osteology: #a0660f;
   --arthrology: #0f7a7a;
   --myology: #b23a48;
+  --splanchnology: #7a4bb0;
+  --angiology: #2a63b0;
   --accent: #3a4a6b;
   --radius: 12px;
   --serif: Georgia, "Times New Roman", serif;
@@ -29,6 +31,8 @@
     --osteology: #e0a94a;
     --arthrology: #4cc2c2;
     --myology: #ef7f8c;
+    --splanchnology: #c0a0ee;
+    --angiology: #86b4f2;
     --accent: #9db2e0;
   }
 }
@@ -51,6 +55,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 [data-sec="osteology"] { --accent: var(--osteology); }
 [data-sec="arthrology"] { --accent: var(--arthrology); }
 [data-sec="myology"] { --accent: var(--myology); }
+[data-sec="splanchnology"] { --accent: var(--splanchnology); }
+[data-sec="angiology"] { --accent: var(--angiology); }
 
 /* ---------- шапка ---------- */
 .top {
@@ -78,14 +84,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 
 main { max-width: 1200px; margin: 0 auto; padding: 24px 20px 48px; }
+main.wide { max-width: 1760px; }
 .foot { text-align: center; color: var(--muted); font-size: 13px; padding: 0 20px 28px; }
 
 h1 { font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); line-height: 1.2; margin: 0 0 6px; }
 .lead { color: var(--muted); margin: 0 0 24px; max-width: 60ch; }
 .lat { font-family: var(--serif); font-style: italic; color: var(--accent); }
+.lt { font-family: var(--serif); font-style: italic; color: var(--accent); font-size: 1.04em; }
 
 /* ---------- главная: три колонки ---------- */
 .columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: start; }
+@media (min-width: 1560px) { .columns.home { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 .col {
   background: var(--surface); border: 1px solid var(--line);
   border-top: 4px solid var(--accent); border-radius: var(--radius); overflow: hidden;
@@ -158,9 +167,10 @@ h1 { font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); line-height: 
 .check[aria-pressed="true"] { background: var(--ok); border-color: var(--ok); color: #fff; }
 .item p { margin: 10px 0 0; }
 .item ul { margin: 10px 0 0; padding-left: 20px; }
-.item li { margin-bottom: 4px; }
+.item li { margin-bottom: 5px; }
+.card li { margin-bottom: 5px; }
 .fields { margin: 10px 0 0; display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 6px 14px; }
-.fields dt { color: var(--accent); font-weight: 600; font-size: 14px; padding-top: 1px; }
+.fields dt { color: var(--muted); font-weight: 700; font-size: 12.5px; text-transform: uppercase; letter-spacing: .05em; padding-top: 4px; }
 .fields dd { margin: 0; }
 .note { color: var(--muted); font-size: 15px; }
 

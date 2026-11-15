@@ -74,6 +74,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .top-nav a:hover { color: var(--accent); }
 .top-nav a.on { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+.top-nav .nav-sep { width: 1px; align-self: stretch; margin: 6px 6px; background: var(--line); }
+.top-nav a.nav-x { color: var(--text); border-color: var(--line); background: var(--surface-2); }
+.top-nav a.nav-x.on { color: var(--bg); background: var(--accent); border-color: var(--accent); }
 .search { margin-left: auto; flex: 1 1 200px; max-width: 320px; }
 .search input {
   width: 100%; padding: 8px 14px; font: inherit; color: var(--text);
@@ -122,6 +125,16 @@ h1 { font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); line-height: 
   padding: 2px 8px; border-radius: 999px; background: var(--surface-2);
 }
 .count.done { background: var(--ok); color: #fff; }
+
+/* ---------- вход в «Модуль» и «ИИ-помощник» с главной ---------- */
+.home-tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: -4px 0 22px; max-width: 900px; }
+.home-tools a {
+  display: block; padding: 14px 18px; text-decoration: none; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+}
+.home-tools a:hover { border-color: var(--accent); }
+.home-tools b { display: block; font-family: var(--serif); font-size: 20px; }
+.home-tools span { display: block; color: var(--muted); font-size: 14px; line-height: 1.4; margin-top: 2px; }
 
 /* ---------- возрастные особенности ---------- */
 .tag {
@@ -235,6 +248,104 @@ h1 { font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); line-height: 
 .options button.wrong { border-color: var(--bad); box-shadow: inset 4px 0 0 var(--bad); }
 .options button:disabled { cursor: default; }
 
+/* ---------- модуль ---------- */
+.btn.small { padding: 4px 12px; font-size: 13px; }
+.actions.left { justify-content: flex-start; }
+.mod-settings { display: flex; flex-wrap: wrap; gap: 14px 28px; margin: 0 0 22px; }
+.mod-settings > div { display: flex; flex-direction: column; gap: 6px; }
+.mod-settings > div > span { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); padding: 3px; gap: 2px; }
+.seg button { border: 0; background: none; padding: 6px 14px; border-radius: 999px; }
+.seg button.on { background: var(--accent); color: var(--bg); font-weight: 600; }
+.mod-resume {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 12px 16px; margin-bottom: 20px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--accent);
+}
+.mod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+.mod-card {
+  display: flex; flex-direction: column; gap: 6px; padding: 18px;
+  background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: var(--radius);
+}
+.mod-card.final { grid-column: 1 / -1; }
+.mod-card h2 { margin: 0; font-family: var(--serif); font-size: 22px; }
+.mod-card p { margin: 0; }
+.mod-meta { color: var(--muted); font-size: 14px; }
+.mod-last { font-size: 13px; color: var(--muted); flex: 1; }
+.mod-card .btn { align-self: flex-start; margin-top: 8px; }
+.mod-about { margin-top: 22px; max-width: 75ch; }
+
+.mod-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 14px; }
+.mod-run .bar { margin: 8px 0 22px; }
+.mod-sec { display: inline-block; margin-bottom: 8px; padding: 1px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); }
+.mod-run .quiz-sub { margin: 0 0 4px; }
+.mod-run .quiz-q { margin: 0 0 18px; }
+.mod-run .options button { display: flex; gap: 12px; align-items: baseline; }
+.options .num {
+  flex: none; width: 22px; height: 22px; line-height: 22px; text-align: center; border-radius: 50%;
+  font-size: 12px; font-weight: 700; color: var(--muted); background: var(--surface-2);
+}
+.options button.picked { border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
+.mod-verdict { margin: 16px 0 12px; padding: 10px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
+.mod-verdict.ok { border-color: var(--ok); color: var(--ok); font-weight: 600; }
+.mod-verdict.bad { border-color: var(--bad); }
+.mod-ans { min-height: 0; }
+.mod-src { font-size: 13px; }
+.mod-src a { color: var(--accent); }
+.mod-title { color: var(--muted); font-size: 14px; margin-bottom: 4px; }
+.mod-h { font-family: var(--serif); font-size: 22px; margin: 28px 0 10px; }
+.mod-break a {
+  display: grid; grid-template-columns: minmax(0, 1fr) 90px auto; align-items: center; gap: 12px;
+  padding: 9px 14px; margin-bottom: 6px; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+}
+.mod-break a:hover { border-color: var(--accent); }
+.mod-break .bar { margin: 0; }
+.mistake { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--bad); border-radius: 10px; margin-bottom: 8px; }
+.mistake summary { padding: 12px 16px; cursor: pointer; display: grid; gap: 3px; list-style-position: outside; }
+.mistake summary small { color: var(--muted); }
+.mistake .m-bad { color: var(--bad); font-size: 14.5px; }
+.mistake .m-ok { color: var(--ok); font-size: 14.5px; }
+.mistake .card { border: 0; border-top: 1px solid var(--line); border-radius: 0 0 10px 0; }
+
+/* ---------- ИИ-помощник ---------- */
+.ai-examples { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.ai-examples .btn { text-align: left; font-size: 14.5px; }
+.ai-msg { margin-bottom: 14px; }
+.ai-msg.user { display: flex; justify-content: flex-end; }
+.ai-bubble { padding: 12px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); overflow-wrap: anywhere; }
+.ai-msg.user .ai-bubble { max-width: 85%; background: var(--surface-2); }
+.ai-bubble:empty { display: none; }
+.ai-bubble p { margin: 0 0 10px; }
+.ai-bubble > :last-child { margin-bottom: 0; }
+.ai-bubble ul, .ai-bubble ol { margin: 0 0 10px; padding-left: 22px; }
+.ai-bubble li { margin-bottom: 4px; }
+.ai-bubble h4 { margin: 14px 0 6px; font-size: 16px; }
+.ai-bubble code { font-size: .92em; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+.ai-wait { color: var(--muted); }
+.ai-note { margin: 6px 2px 0; font-size: 14px; color: var(--muted); }
+.ai-note.bad { color: var(--bad); }
+.ai-ctx { margin-bottom: 8px; }
+.ai-ctx > span { display: block; font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 6px; }
+.ai-ctx details { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 8px; margin-bottom: 5px; }
+.ai-ctx summary { padding: 7px 12px; cursor: pointer; }
+.ai-ctx-body { padding: 0 14px 10px; }
+.ai-manual { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 8px; }
+.ai-manual a.btn { text-decoration: none; display: inline-block; }
+.ai-form { margin: 18px 0; }
+.ai-form textarea, .ai-settings input, .ai-settings select {
+  width: 100%; font: inherit; color: var(--text); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px;
+}
+.ai-form textarea { resize: vertical; min-height: 84px; display: block; margin-bottom: 10px; }
+.ai-form textarea:focus, .ai-settings input:focus, .ai-settings select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.ai-settings { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 18px; margin: 22px 0 14px; }
+.ai-settings summary { padding: 14px 0; cursor: pointer; font-weight: 600; }
+.ai-settings p { margin: 0 0 10px; font-size: 14.5px; color: var(--muted); }
+.ai-settings label { display: block; margin: 12px 0; font-size: 14px; font-weight: 600; }
+.ai-settings label input, .ai-settings label select { margin-top: 5px; font-weight: 400; }
+.ai-settings .actions { margin: 14px 0 18px; }
+
 /* ---------- поиск ---------- */
 .results a {
   display: block; padding: 12px 16px; margin-bottom: 8px; text-decoration: none;
@@ -245,6 +356,11 @@ h1 { font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); line-height: 
 
 /* ---------- адаптив ---------- */
 @media (max-width: 900px) {
+  .top-nav { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; scrollbar-width: none; flex: 1 1 100%; order: 3; }
+  .top-nav::-webkit-scrollbar { display: none; }
+  .top-nav a { white-space: nowrap; flex: none; }
+  .search { order: 2; }
+  .home-tools { grid-template-columns: 1fr; }
   .columns { grid-template-columns: 1fr; }
   .layout { grid-template-columns: 1fr; gap: 16px; }
   .side { position: static; max-height: none; display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; }

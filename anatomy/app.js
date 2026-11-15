@@ -156,9 +156,14 @@
     return h;
   }
 
+  const EXTRA = [["module", "Модуль"], ["ai", "ИИ-помощник"]];
   function renderNav(activeId) {
     topNav.innerHTML = DATA.map((s) =>
-      `<a href="#/${s.id}" data-sec="${s.id}" class="${s.id === activeId ? "on" : ""}">${s.title}</a>`).join("");
+      `<a href="#/${s.id}" data-sec="${s.id}" class="${s.id === activeId ? "on" : ""}">${s.title}</a>`).join("")
+      + `<span class="nav-sep" aria-hidden="true"></span>`
+      + EXTRA.map(([id, title]) => `<a href="#/${id}" class="nav-x ${id === activeId ? "on" : ""}">${title}</a>`).join("");
+    const on = topNav.querySelector("a.on");
+    if (on && on.scrollIntoView) on.scrollIntoView({ block: "nearest", inline: "nearest" });
   }
 
   function countBadge(done, total) {
@@ -205,6 +210,10 @@
     app.innerHTML = `
       <h1>Анатомия по разделам</h1>
       <p class="lead">Выберите раздел и тему. В каждой теме — конспект с латинскими терминами, карточки для самопроверки и тест.</p>
+      <div class="home-tools">
+        <a href="#/module"><b>Модуль</b><span>Тесты по каждому разделу и итоговый тест на 50 вопросов — подготовка к экзамену</span></a>
+        <a href="#/ai"><b>ИИ-помощник</b><span>Задайте вопрос по анатомии: объяснит, поможет запомнить, разберёт ошибки</span></a>
+      </div>
       ${ageStrip()}
       <div class="columns home">${DATA.map(columnHtml).join("")}</div>`;
     loadImages(DATA.map((s) => IMG.sections[s.id]));
@@ -479,12 +488,25 @@
 
   /* ---------- маршрутизация ---------- */
   let lastTopicKey = null;
+  let lastPage = null;
 
   function route() {
     const q = searchInput.value.trim();
     if (q.length >= 2) { renderSearch(q); return; }
 
     const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+    const page = (window.APP_PAGES || {})[parts[0]];
+    if (page) {
+      const entered = lastPage !== parts[0];
+      lastPage = parts[0];
+      lastTopicKey = null;
+      renderNav(parts[0]);
+      app.classList.remove("wide");
+      page(parts.slice(1));
+      if (entered) window.scrollTo(0, 0);
+      return;
+    }
+    lastPage = null;
     const sec = findSection(parts[0]);
     if (!sec) { lastTopicKey = null; renderHome(); window.scrollTo(0, 0); return; }
     const topic = sec.topics.find((t) => t.id === parts[1]);
@@ -506,6 +528,9 @@
     const a = e.target.closest && e.target.closest(".results a");
     if (a) { searchInput.value = ""; if (a.getAttribute("href") === location.hash) route(); }
   });
+
+  // помощники для дополнительных страниц (module.js, ai.js)
+  window.APP = { DATA, el: app, esc, fmt, shuffle, itemBody, figure, loadImages, imgTitle };
 
   route();
 })();
